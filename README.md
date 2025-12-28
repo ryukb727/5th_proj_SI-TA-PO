@@ -99,17 +99,13 @@
 - **OS**: Debian GNU/Linux 13.2 (trixie)
 - **Kernel**: 6.1.93-v8+
 
+## 빌드/설치
 
-### 1) 빌드 (ubuntu)
+### 1) Build (Ubuntu)
 ```bash
 make
-
-### 2) Install / Load (raspberry pi)
-```bash
+### 2) Install / Load (Raspberry Pi)
 sudo insmod device_driver_mod.ko
 dmesg -w
-
-### 3) Unload (raspberry Pi)
-```bash
-sudo rmmod device_driver
-
+### 3) Unload (Raspberry Pi)
+sudo rmmod device_driver_mod
