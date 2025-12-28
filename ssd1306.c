@@ -231,8 +231,6 @@ void oled_update_work_func(struct work_struct *work)
 {
     char time_buf[16];
     char status_buf[24];
-    // buf 대신 status_buf나 별도의 배열을 사용해야 합니다. 
-    // 여기서는 통일감을 위해 time_buf와 status_buf를 적절히 활용합니다.
 
     if(gClient == NULL) return;
 
