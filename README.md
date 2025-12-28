@@ -101,11 +101,11 @@
 
 ## 빌드/설치
 
-### 1) Build (Ubuntu)
+1) Build (Ubuntu)
 ```bash
 make
-### 2) Install / Load (Raspberry Pi)
+2) Install / Load (Raspberry Pi)
 sudo insmod device_driver_mod.ko
 dmesg -w
-### 3) Unload (Raspberry Pi)
+3) Unload (Raspberry Pi)
 sudo rmmod device_driver_mod
