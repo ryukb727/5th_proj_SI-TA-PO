@@ -84,7 +84,7 @@ int oled_write(struct i2c_client *client, bool is_cmd, uint8_t data)
     스택 영역이 아닌 데이터 영역에 미리 할당하도록
      uint8_t buf[1025]로 변수 선언
     */
-     uint8_t buf[1025];
+    uint8_t buf[1025];
     buf[0] = 0x40;
     int i;
 
@@ -97,7 +97,7 @@ int oled_write(struct i2c_client *client, bool is_cmd, uint8_t data)
         ftrace를 이용해 i2c 관련 이벤트를 추적, 로그를 확인한 결과
         데이터는 잘리지 않고 온전히 전송됨을 확인.
         커널 메세지로도 확인할 수 있도록 코드 추가 및 1025바이트 전부 전송 된 것 확인 함*/
-     uint8_t buf[1025];
+    uint8_t buf[1025];
     buf[0] = 0x40;
     int i;
     int ret;
@@ -106,10 +106,11 @@ int oled_write(struct i2c_client *client, bool is_cmd, uint8_t data)
     
     ret = i2c_master_send(client, buf, 1025);
 
-    if (ret != 1025) {
+    if(ret != 1025){
         // 실제 전송된 바이트 수가 1025가 아니면 에러 메시지 출력
         printk(KERN_ERR "OLED: 전송 실패! 요청: 1025, 실제전송: %d\n", ret);
-    } else {
+    }
+	else{
         // 정확히 1025바이트를 다 보냈다면 성공 메시지 출력
         printk(KERN_INFO "OLED: 1025바이트 전송 성공 반환\n");
     }
@@ -122,7 +123,7 @@ int oled_write(struct i2c_client *client, bool is_cmd, uint8_t data)
     
     buf[0] = 0x40; // Data 모드 설정
     
-    for (page = 0; page < 8; page++) {
+    for(page = 0; page < 8; page++){
         // 1. 매 페이지 시작마다 주소 재지정(가장 중요!)
         oled_write(client, true, 0xB0 + page); // 페이지 번호 (0xB0 ~ 0xB7)
         oled_write(client, true, 0x00);        // 컬럼 시작 위치 (하위 4비트)
@@ -150,8 +151,7 @@ int oled_write(struct i2c_client *client, bool is_cmd, uint8_t data)
     oled_write(client, true, 0x10 + ((x>>4) & 0x0F));  // 0x10 = set higher column start address for page addressing mode : x축 즉 가로 위치의 상위 4비트
 
     // 2. 폰트 데이터 5바이트 전송(data)
-    for(i=0; i<5; i++)
-    {
+    for(i=0; i<5; i++){
         oled_write(client, false, SSD1306_font[font_idx][i]);
     }
 
@@ -177,8 +177,7 @@ int oled_write(struct i2c_client *client, bool is_cmd, uint8_t data)
 
  void oled_put_string(struct i2c_client* client, int x, int y, char* str)
 {
-    while(*str)
-    {
+    while(*str){
         oled_put_char(client, x, y, *str++);
         x += 6;     // 한 글자 당 5픽셀 + 간격 1픽셀
     }
@@ -206,25 +205,20 @@ int oled_write(struct i2c_client *client, bool is_cmd, uint8_t data)
 
  void oled_put_string_16x10(struct i2c_client* client, int x, int y, char* str)
 {
-    while(*str)
-    {
+    while(*str){
         int idx = -1;
 
-        if(*str>='0' && *str<='9')
-        {
+        if(*str>='0' && *str<='9'){
             idx = *str - '0';
         }
-        else if(*str == ':')
-        {
+        else if(*str == ':'){
             idx = 10;
         }
-        else if(*str == ' ')
-        {
+        else if(*str == ' '){
             idx = 11;
         }
-
-        if(idx != -1)
-        {
+		
+        if(idx != -1){
             oled_put_num_16x10(client, x, y, idx);
             x += 12;
         }
@@ -233,85 +227,90 @@ int oled_write(struct i2c_client *client, bool is_cmd, uint8_t data)
 }
 
 // 워크큐에서 oled_put 함수 호출
-void oled_update_work_func(struct work_struct *work) {
+void oled_update_work_func(struct work_struct *work)
+{
     char time_buf[16];
     char status_buf[24];
     // buf 대신 status_buf나 별도의 배열을 사용해야 합니다. 
     // 여기서는 통일감을 위해 time_buf와 status_buf를 적절히 활용합니다.
 
-    if (gClient == NULL) return;
+    if(gClient == NULL) return;
 
     // 모드 바뀔 때 한번 화면 클리어
-    if (need_clear) {
+    if(need_clear){
         oled_clear_screen(gClient);
         need_clear = 0; // 지운 후 플래그 초기화
     }
 
     // 1. [상단] 모드 제목 출력
-    if (mode == 0)      oled_put_string(gClient, 28, 0, "  [ CLOCK ]  ");
-    else if (mode == 1) oled_put_string(gClient, 28, 0, "  [ TIMER ]  ");
-    else                oled_put_string(gClient, 28, 0, "[ POMODORO ]");
+    if(mode == 0)
+		oled_put_string(gClient, 28, 0, "  [ CLOCK ]  ");
+    else if(mode == 1)
+		oled_put_string(gClient, 28, 0, "  [ TIMER ]  ");
+    else
+		oled_put_string(gClient, 28, 0, "[ POMODORO ]");
 
     // 2. [중앙 & 하단] 모드별 상세 로직
-    if (mode == 0) { // 시계 모드
+    if(mode == 0){ // 시계 모드
         snprintf(time_buf, sizeof(time_buf), "%02d:%02d:%02d", _ds1302_date.hours, _ds1302_date.minutes, _ds1302_date.seconds);
         oled_put_string_16x10(gClient, 16, 3, time_buf);
         
         oled_draw_underline(gClient, 16, 5, 22, (set_mode == 2)); // 시 수정
         oled_draw_underline(gClient, 52, 5, 22, (set_mode == 1)); // 분 수정
         
-        if (set_mode > 0) oled_put_string(gClient, 10, 7, "  Setting...    ");
-        else             oled_put_string(gClient, 10, 7, "                ");
+        if(set_mode > 0)
+			oled_put_string(gClient, 10, 7, "  Setting...    ");
+        else
+			oled_put_string(gClient, 10, 7, "                ");
     } 
-    else if (mode == 1) { // 타이머 모드
+    else if(mode == 1){ // 타이머 모드
         snprintf(time_buf, sizeof(time_buf), "%02d:%02d", timer_m, timer_s);
         oled_put_string_16x10(gClient, 34, 3, time_buf);
         
         oled_draw_underline(gClient, 34, 5, 22, (set_mode == 1)); // 분 수정
         oled_draw_underline(gClient, 70, 5, 22, (set_mode == 0)); // 초 수정
         
-        if (set_mode < 2)
+        if(set_mode < 2)
             oled_put_string(gClient, 10, 7, "  Setting...    ");
-        else
-        {
+        else{
             if(timer_finished_alert)
                 oled_put_string(gClient, 10, 7, "   Time's up!!     ");
             else
                 oled_put_string(gClient, 10, 7, "   Timer Start!!     ");
         }
     } 
-    else { // 뽀모도로 모드 (mode == 2)
-        if (set_mode == 0) { // 집중 시간 설정
+    else{ // 뽀모도로 모드 (mode == 2)
+        if(set_mode == 0){ // 집중 시간 설정
             snprintf(time_buf, sizeof(time_buf), "%02d:00", pomo_work);
             oled_put_string_16x10(gClient, 34, 3, time_buf);
             oled_put_string(gClient, 10, 7, "Set Work Time   ");
             oled_draw_underline(gClient, 34, 5, 22, true); 
             oled_draw_underline(gClient, 70, 5, 22, false);
         } 
-        else if (set_mode == 1) { // 휴식 시간 설정
+        else if(set_mode == 1){ // 휴식 시간 설정
             snprintf(time_buf, sizeof(time_buf), "%02d:00", pomo_rest);
             oled_put_string_16x10(gClient, 34, 3, time_buf);
             oled_put_string(gClient, 10, 7, "Set Rest Time   ");
             oled_draw_underline(gClient, 34, 5, 22, true);
             oled_draw_underline(gClient, 70, 5, 22, false);
         } 
-        else if (set_mode == 2) { // 반복 횟수 설정
+        else if(set_mode == 2){ // 반복 횟수 설정
             snprintf(time_buf, sizeof(time_buf), "  %02d   ", pomo_repeat);
             oled_put_string_16x10(gClient, 34, 3, time_buf);
             oled_put_string(gClient, 10, 7, "Set Repeat Count");
             oled_draw_underline(gClient, 34, 5, 58, true); 
         } 
-        else { // set_mode == 3 (작동 중)
+        else{ // set_mode == 3 (작동 중)
             snprintf(time_buf, sizeof(time_buf), "%02d:%02d", timer_m, timer_s);
             oled_put_string_16x10(gClient, 34, 3, time_buf);
             
             const char* state_name = (pomo_state == 0) ? "Focus" : "Rest ";
             int display_round;
 
-            if(pomo_state == 0) {
+            if(pomo_state == 0){
                 display_round = pomo_cur_repeat + 1;
             }
-            else {
+            else{
                 display_round = pomo_cur_repeat;
             }
             snprintf(status_buf, sizeof(status_buf), "%s Time! %d/%d", state_name, display_round, pomo_repeat);
@@ -323,7 +322,8 @@ void oled_update_work_func(struct work_struct *work) {
 }
 
 // x 위치부터 len만큼 밑줄을 긋거나 지우는 함수
-void oled_draw_underline(struct i2c_client* client, int x, int y, int len, bool show) {
+void oled_draw_underline(struct i2c_client* client, int x, int y, int len, bool show)
+{
     uint8_t buf[129];
     buf[0] = 0x40; // Data mode
     memset(&buf[1], show ? 0x01 : 0x00, len); // 0x01은 가장 윗 픽셀 하나만 켬 (밑줄 효과)
@@ -363,11 +363,13 @@ MODULE_DEVICE_TABLE(i2c, oled_id);
 
 
 // 불러서 쓸 초기화 함수와 free 함수
-int init_ssd1306(void){
+int init_ssd1306(void)
+{
 	printk(KERN_INFO "=== ssd1306 initializing ===");
     return i2c_add_driver(&oled_driver);
 }
-void free_ssd1306(void){
+void free_ssd1306(void)
+{
 	printk(KERN_INFO "=== ssd1306 exit ===");
     i2c_del_driver(&oled_driver);
 }
