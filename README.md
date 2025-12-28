@@ -73,7 +73,7 @@
 
 ### MODE 1 시계
 <p align="left">
-  <img src="docs/gif/input1large.gif" width="700">
+  <img src="docs/gif/input3large.gif" width="700">
 </p>
 
 ### MODE 2 알람
@@ -83,7 +83,7 @@
 
 ### MODE 3 뽀모도로
 <p align="left">
-  <img src="docs/gif/input3large.gif" width="700">
+  <img src="docs/gif/input1large.gif" width="700">
 </p>
 
 
