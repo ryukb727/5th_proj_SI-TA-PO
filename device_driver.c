@@ -603,7 +603,7 @@ static int __init dokidoki_driver_init(void)
 
 		return ret;
 	}
-	// 2. register char device 
+	// register char device 
 	cdev_init(&dokidoki_cdev, &fops);
 	if((ret = cdev_add(&dokidoki_cdev,device_number, 1)) == -1){
 	
@@ -611,7 +611,7 @@ static int __init dokidoki_driver_init(void)
 		unregister_chrdev_region(device_number,1);
 		return ret;
 	}
-	// 3. create class & create device ex) /dev/rotary_driver
+	// create class & create device ex) /dev/rotary_driver
 	dokidoki_class = class_create(THIS_MODULE, CLASS_NAME);	
 	if(IS_ERR(dokidoki_class)){
 		printk(KERN_ERR "ERROR: class_create()\n");
@@ -620,8 +620,7 @@ static int __init dokidoki_driver_init(void)
 		return PTR_ERR(dokidoki_class);
 	}
 	device_create(dokidoki_class, NULL, device_number, NULL, DRIVER_NAME);
-	// 4. request GPIO
-		// 1. GPIO 유효성 검사		// 다른 곳에서 이미 쓰고 있지 않은지 확인
+	// validate GPIO		// 다른 곳에서 이미 쓰고 있지 않은지 확인
     if( /*!gpio_is_valid(OLED_SDA) || !gpio_is_valid(OLED_SCL) || !gpio_is_valid(OLED_RES)
 		 ||*/ !gpio_is_valid(LED00) || !gpio_is_valid(LED01) || !gpio_is_valid(LED02)
 		 || !gpio_is_valid(LED03) || !gpio_is_valid(LED04) || !gpio_is_valid(LED05)
@@ -631,7 +630,7 @@ static int __init dokidoki_driver_init(void)
         return -ENODEV;
     }
 
-	// 4. request GPIO
+	// request GPIO
 	if( /*gpio_request(OLED_SDA, "OLED_SDA") || gpio_request(OLED_SCL, "OLED_SCL") || gpio_request(OLED_RES, "OLED_RES")
 		 || */gpio_request(LED00, "LED00") || gpio_request(LED01, "LED01") || gpio_request(LED02, "LED02")
 		 || gpio_request(LED03, "LED03") || gpio_request(LED04, "LED04") || gpio_request(LED05, "LED05")
@@ -659,34 +658,6 @@ static int __init dokidoki_driver_init(void)
 	gpio_direction_output(LED06, 0);
 	gpio_direction_output(LED07, 0);
 
-	
-	// timer 초기화
-	timer_setup(&my_kernel_timer, my_timer_callback, 0);
-
-	// 5. assign GPIO to irq
-	rotary_s1_irq = gpio_to_irq(ROTARY_S1);
-	ret = request_irq(rotary_s1_irq, rotary_s1_irq_handler /* int handler */ , IRQF_TRIGGER_FALLING,"my_rotary_S1_irq",NULL); 
-	if(ret){
-
-		printk(KERN_ERR "ERROR: request_irq() : %d\n", ROTARY_S1);
-		return ret;
-	}
-
-	rotary_key_irq = gpio_to_irq(ROTARY_KEY);
-	ret = request_irq(rotary_key_irq, rotary_key_irq_handler /* int handler */ , IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,"my_rotary_key_irq",NULL); 
-	if(ret){
-
-		printk(KERN_ERR "ERROR: request_irq() : %d\n", ROTARY_KEY);
-		return ret;
-	}
-
-	tact_irq = gpio_to_irq(TACT_SW);
-	ret = request_irq(tact_irq, tact_irq_handler /* tact handler */ , IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,"my_tact_irq",NULL); 
-	if(ret){
-
-		printk(KERN_ERR "ERROR: request_irq() : %d\n", TACT_SW);
-		return ret;
-	}
 
 	// ssd1306 init
 	ret = init_ssd1306();
@@ -724,6 +695,34 @@ static int __init dokidoki_driver_init(void)
 
 	INIT_WORK(&ds1302_work, ds1302_update_work_func);
 	printk(KERN_INFO "Info: rotary driver init Success\n");
+	
+	// timer 초기화
+	timer_setup(&my_kernel_timer, my_timer_callback, 0);
+
+	// 5. assign GPIO to irq
+	rotary_s1_irq = gpio_to_irq(ROTARY_S1);
+	ret = request_irq(rotary_s1_irq, rotary_s1_irq_handler /* int handler */ , IRQF_TRIGGER_FALLING,"my_rotary_S1_irq",NULL); 
+	if(ret){
+
+		printk(KERN_ERR "ERROR: request_irq() : %d\n", ROTARY_S1);
+		return ret;
+	}
+
+	rotary_key_irq = gpio_to_irq(ROTARY_KEY);
+	ret = request_irq(rotary_key_irq, rotary_key_irq_handler /* int handler */ , IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,"my_rotary_key_irq",NULL); 
+	if(ret){
+
+		printk(KERN_ERR "ERROR: request_irq() : %d\n", ROTARY_KEY);
+		return ret;
+	}
+
+	tact_irq = gpio_to_irq(TACT_SW);
+	ret = request_irq(tact_irq, tact_irq_handler /* tact handler */ , IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,"my_tact_irq",NULL); 
+	if(ret){
+
+		printk(KERN_ERR "ERROR: request_irq() : %d\n", TACT_SW);
+		return ret;
+	}
 	
 	mod_timer(&my_kernel_timer, jiffies + HZ); // 1초 뒤 작동
 	return ret;
