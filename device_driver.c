@@ -61,7 +61,7 @@ struct ds1302_time _ds1302_date;
 
 // TACT 
 #define TACT_SW 20
-#define DEBOUNCE_MS 30
+#define DEBOUNCE_MS 50
 
 
 
