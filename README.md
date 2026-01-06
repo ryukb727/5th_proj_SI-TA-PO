@@ -13,6 +13,20 @@
 ## Linux Kernel Device Driver 기반 타이머 · 시계 · 뽀모도로 임베디드 시스템
 
 <img width="2050" height="974" alt="Image" src="https://github.com/user-attachments/assets/745f11eb-b329-4c47-9dd5-5b34204aff43" />
+### MODE 1 시계
+<p align="left">
+  <img src="docs/gif/input3large.gif" width="700">
+</p>
+
+### MODE 2 알람
+<p align="left">
+  <img src="docs/gif/input2large.gif" width="700">
+</p>
+
+### MODE 3 뽀모도로
+<p align="left">
+  <img src="docs/gif/input1large.gif" width="700">
+</p>
 
 ---
 
