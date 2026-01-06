@@ -1,4 +1,53 @@
+| [Korean 🇰🇷](#korean) | [Japanese 🇯🇵](#japanese) | [Team](#Team) |
+| :---: | :---: | :---: |
 
+</div>
+
+---
+
+<div id="korean">
+
+### 🇰🇷 Korean Version
+
+# ⏱️ Linux 커널 디바이스 드라이버 기반 시계-타이머-뽀모도로 3 Mode 시간 관리 시스템
+
+<div align="center">
+<a href="#japanese">⬇️ 日本語バージョンへ移動 (Go to Japanese Version) ⬇️</a>
+</div>
+
+</div>
+
+---
+
+<div id="japanese">
+
+### 🇯🇵 Japanese Version
+
+# ⏱️ Linuxカーネルデバイスドライバベース時計・タイマー・ポモドーロ3モード時間管理システム
+
+
+---
+
+<div align="center">
+<a href="#korean">⬆️ 한국어 버전으로 돌아가기 (Go back to Korean Version) ⬆️</a>
+</div>
+
+</div>
+
+---
+---
+
+<div align="center">
+<a href="#Team">⬇️ Go to Team Version ⬇️</a>
+</div>
+
+</div>
+
+---
+
+<div id="Team">
+
+### ⏰ Team
 
 라즈베리파이(또는 리눅스)에서 동작하는 mini device driver 프로젝트입니다.  
 아래 디바이스들을 커널 모듈/드라이버 형태로 제어합니다.
@@ -114,3 +163,8 @@ dmesg -w
 ```bash
 sudo rmmod device_driver_mod
 ```
+---
+
+<div align="center">
+<a href="#korean">⬆️ 한국어 버전으로 돌아가기 (Go back to Korean Version) ⬆️</a>
+</div>
