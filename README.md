@@ -18,7 +18,7 @@
 
 본 프로젝트는 <strong>리눅스 커널 드라이버(v6.1)</strong>를 직접 설계·구현하여,
 하드웨어 자원을 커널 레벨에서 정밀하게 제어하고,
-보드 레벨에서 다양한 입·출력 디바이스를 커널 레벨로 통합 관리하는 <strong>시간 관리 시스템(SI-TA-PO)</strong>입니다.
+보드 레벨의 다양한 입·출력 디바이스를 커널 레벨로 통합 관리하는 <strong>시간 관리 시스템(SI-TA-PO)</strong>입니다.
 
 **SSD1306 OLED**와 **DS1302 RTC**를 데이터시트 기반으로 직접 제어하고,
 <strong>FSM(Finite State Machine)</strong> 아키텍처를 도입하여
@@ -38,16 +38,9 @@
 ![I2C](https://img.shields.io/badge/Interface-I2C-555555?style=for-the-badge)
 ![GPIO](https://img.shields.io/badge/Interface-GPIO%20Interrupt-6DB33F?style=for-the-badge)
 
-![LinuxKernel](https://img.shields.io/badge/Kernel-Workqueue-0078D4?style=for-the-badge&logo=linux&logoColor=white)
-![FSM](https://img.shields.io/badge/Design-FSM-FF9800?style=for-the-badge)
-![Workqueue](https://img.shields.io/badge/Kernel%20Mechanism-Workqueue-00599C?style=for-the-badge&logo=linux&logoColor=white)
-![Workqueue](https://img.shields.io/badge/Linux%20Kernel-Workqueue-0078D4?style=for-the-badge&logo=linux&logoColor=white)
-![Workqueue](https://img.shields.io/badge/Kernel-Workqueue%20(Bottom--Half)-283593?style=for-the-badge&logo=linux&logoColor=white)
-
 ![Linux](https://img.shields.io/badge/OS-Linux%20Kernel%206.1-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 ![Workqueue](https://img.shields.io/badge/Kernel%20Mechanism-Workqueue-00599C?style=for-the-badge&logo=linux&logoColor=white)
 ![FSM](https://img.shields.io/badge/Design-FSM-FF9800?style=for-the-badge)
-
 
 ![SSD1306](https://img.shields.io/badge/Display-SSD1306%20OLED-000000?style=for-the-badge)
 ![DS1302](https://img.shields.io/badge/RTC-DS1302-3F51B5?style=for-the-badge)
@@ -64,7 +57,7 @@
   - 상태 계층화를 통해 논리 충돌 및 예외 상황 방지
 
 - **정밀 입력 시스템**
-  - 로터리 엔코더 회전 입력을 통한 값(시/분/초/반복 횟 등) 설정
+  - 로터리 엔코더 회전 입력을 통한 값(시/분/초/반복 횟수 등) 설정
   - 로터리 엔코더의 키 스위치를 활용한 모드 내부 상태 전환
     - 예: 분 설정 ↔ 시 설정 ↔ 실행 상태 전환
   - 택트 스위치를 이용한 상위 모드(Clock / Timer / Pomodoro) 전환
@@ -81,7 +74,7 @@
 ### 1) SSD1306 OLED 커널 드라이버
 - 커널 I2C 프레임워크 기반 드라이버 구현
 - 전용 폰트 데이터(16x10, 5x7) 설계 및 전송
-- OLED GDDRAM 구조를 고려한 화면 갱신 로직 설
+- OLED GDDRAM 구조를 고려한 화면 갱신 로직 설계
 
 ### 2) FSM(Finite State Machine) 설계
 - 모드(Clock/Timer/Pomodoro)와 동작 단계를 상태 변수로 분리하여 FSM 구성
@@ -89,7 +82,8 @@
 - 비동기 인터럽트 환경에서도 잘못된 상태 진입을 방지하도록 전이 조건을 명확히 정의
 
 ### 3) Workqueue 기반 Bottom-half 처리
-- 인터럽트 핸들러에서 OLED 업데이트 등 무거운 작업을 분리하여 Bottom-half에서 처리전용 워크큐를 구성해 커널 기본 워크큐와의 리소스 경합을 방지
+- 인터럽트 핸들러에서 OLED 업데이트 등 무거운 작업을 분리하여 Bottom-half에서 처리
+- 전용 워크큐를 구성해 커널 기본 워크큐와의 리소스 경합을 방지
 - 커널 인터럽트 부하 감소 및 시스템 응답성 향상
 
 ### 4) I2C 통신 최적화
@@ -99,7 +93,7 @@
 
 ### 5) 입력 디바이스 드라이버
 - GPIO 인터럽트를 활용한 로터리 엔코더·스위치 입력 감지
-- 디바운싱 로직 적용으로 하드웨어 채터링 문제 해결
+- 시간 지연과 신호 검증을 결합한 디바운싱 로직으로 저속 회전 시 발생하는 하드웨어 채터링 문제 해결
 
 ---
 
