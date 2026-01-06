@@ -78,6 +78,7 @@
   - Clock / Timer / Pomodoro 모드 간 상위 상태 전환
   - 각 모드 내부에서 설정·실행 상태를 FSM으로 분리 관리
   - 상태 계층화를 통해 논리 충돌 및 예외 상황 방지
+<img width="4528" height="3466" alt="Image" src="https://github.com/user-attachments/assets/ab2cc4bf-50c0-461c-bd4f-a1bf9bbb443d" />
 
 - **정밀 입력 시스템**
   - 로터리 엔코더 회전 입력을 통한 값(시/분/초/반복 횟수 등) 설정
