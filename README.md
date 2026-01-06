@@ -221,8 +221,6 @@
 
 特に、**割り込みハンドラと専用ワークキューを分離設計 (Top/Bottom Half)** することにより、低スペックな組込み環境においても、**遅延のないユーザー入力処理と安定した画面更新**を達成しています。
 
-특히 <strong>인터럽트 핸들러와 전용 워크큐를 분리 설계(Top/Bottom Half)</strong>하여
-저사양 임베디드 환경에서도 **지연 없는 사용자 입력 처리와 안정적인 화면 갱신**을 달성했습니다.
 
 ### 🧩 システムブロック図 (System Architecture)
 <img width="2509" height="549" alt="Image" src="https://github.com/user-attachments/assets/142183e5-e9a6-4dac-930f-45f40e4922bb" />
