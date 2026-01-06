@@ -279,9 +279,8 @@
 ## 소프트웨어 상태도 (FSM)
 프로젝트의 모드 전환 및 동작 로직을 나타내는 상태 다이어그램입니다.
 <p align="center">
-  <img src="docs/photos/FSM.png" width="800">
+  <img width="4528" height="3466" alt="Image" src="https://github.com/user-attachments/assets/ab2cc4bf-50c0-461c-bd4f-a1bf9bbb443d" />
 </p>
-
 
 ## 주요 기능
 - Rotary 입력으로 메뉴 이동 / 값 조절
