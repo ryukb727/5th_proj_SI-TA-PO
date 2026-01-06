@@ -19,7 +19,7 @@
   <img src="docs/gif/input3large.gif" width="700">
 </p>
 
-### MODE 2 알람
+### MODE 2 타이머
 <p align="left">
   <img src="docs/gif/input2large.gif" width="700">
 </p>
@@ -291,7 +291,7 @@
   <img src="docs/gif/input3large.gif" width="700">
 </p>
 
-### MODE 2 알람
+### MODE 2 타이머
 <p align="left">
   <img src="docs/gif/input2large.gif" width="700">
 </p>
