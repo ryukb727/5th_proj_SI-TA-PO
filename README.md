@@ -189,8 +189,166 @@
 
 ### 🇯🇵 Japanese Version
 
-# ⏱️ Linuxカーネルデバイスドライバベース時計・タイマー・ポモドーロ3モード時間管理システム
+# ⏱️ SI-TA-PO  
+## Linuxカーネルデバイスドライバベース：タイマー・時計・ポモドーロ組込みシステム
 
+<img width="2050" height="974" alt="Image" src="https://github.com/user-attachments/assets/745f11eb-b329-4c47-9dd5-5b34204aff43" />
+
+### MODE 1 時計 (Clock)
+<p align="left">
+  <img src="docs/gif/input3large.gif" width="700">
+</p>
+
+### MODE 2 タイマー (Timer)
+<p align="left">
+  <img src="docs/gif/input2large.gif" width="700">
+</p>
+
+### MODE 3 ポモドーロ (Pomodoro)
+<p align="left">
+  <img src="docs/gif/input1large.gif" width="700">
+</p>
+
+---
+
+## 💡 1. 프로젝트 개요
+
+本プロジェクトは、**Linuxカーネルドライバ (v6.1)** を独自に設計・実装し、ハードウェアリソースをカーネルレベルで精密に制御、ボードレベルの多様な入出力デバイスを統合管理する**時間管理システム (SI-TA-PO)** です。
+
+**SSD1306 OLED** および **DS1302 RTC** をデータシートに基づいて直接制御し、**FSM (Finite State Machine)** アーキテクチャを導入することで、時計・タイマー・ポモドーロの各モード間における安定した状態遷移を実現しました。
+
+特に、**割り込みハンドラと専用ワークキューを分離設計 (Top/Bottom Half)** することにより、低スペックな組込み環境においても、**遅延のないユーザー入力処理と安定した画面更新**を達成しています。
+
+특히 <strong>인터럽트 핸들러와 전용 워크큐를 분리 설계(Top/Bottom Half)</strong>하여
+저사양 임베디드 환경에서도 **지연 없는 사용자 입력 처리와 안정적인 화면 갱신**을 달성했습니다.
+
+### 🧩 システムブロック図 (System Architecture)
+<img width="2509" height="549" alt="Image" src="https://github.com/user-attachments/assets/142183e5-e9a6-4dac-930f-45f40e4922bb" />
+
+### 🔌 回路図 (Schematic)
+<img width="1145" height="784" alt="Image" src="https://github.com/user-attachments/assets/15773fd2-9916-49aa-8377-cc9fbe68424c" />
+
+---
+
+## 🛠️ 2. 技術スタック
+
+![C](https://img.shields.io/badge/Language-C-A8B9CC?style=for-the-badge&logo=c&logoColor=black)
+![Linux](https://img.shields.io/badge/OS-Linux%20Kernel%206.1-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![RaspberryPi](https://img.shields.io/badge/Platform-Raspberry%20Pi%204-A22846?style=for-the-badge&logo=raspberrypi&logoColor=white)
+<br>
+![I2C](https://img.shields.io/badge/Interface-I2C-555555?style=for-the-badge)
+![GPIO](https://img.shields.io/badge/Interface-GPIO%20Interrupt-6DB33F?style=for-the-badge)
+<br>
+![Workqueue](https://img.shields.io/badge/Kernel%20Mechanism-Workqueue-00599C?style=for-the-badge&logo=linux&logoColor=white)
+![FSM](https://img.shields.io/badge/Design-FSM-FF9800?style=for-the-badge)
+<br>
+![SSD1306](https://img.shields.io/badge/Display-SSD1306%20OLED-000000?style=for-the-badge)
+![DS1302](https://img.shields.io/badge/RTC-DS1302-3F51B5?style=for-the-badge)
+![RotaryEncoder](https://img.shields.io/badge/Input-Rotary%20Encoder-795548?style=for-the-badge)
+![TactSwitch](https://img.shields.io/badge/Input-Tact%20Switch-607D8B?style=for-the-badge)
+
+---
+
+## 🎯 3. 主要機能
+
+- **FSMベースの3モード制御**
+  - Clock / Timer / Pomodoro モード間の上位状態遷移
+  - 各モード内部での設定・実行状態をFSMで分離管理
+  - 状態の階層化により、ロジックの衝突や例外動作を防止
+<img width="4528" height="3466" alt="Image" src="https://github.com/user-attachments/assets/ab2cc4bf-50c0-461c-bd4f-a1bf9bbb443d" />
+
+- **精密な入力システム**
+  - ロータリーエンコーダによる値（時/分/秒/反復回数など）の設定
+  - ロータリーエンコーダのプッシュスイッチを活用した内部状態遷移
+    - 例：分設定 ↔ 時設定 ↔ 実行状態の切り替え
+  - タクトスイッチによる上位モードの切り替え
+  - 割り込みベースの入力処理による即応性の確保
+
+- **リアルタイム・ビジュアライゼーション**
+  - 現在のモード、設定値、進行状況をOLEDへリアルタイム出力
+  - タイマー終了時、LED点滅によるユーザー通知機能
+
+---
+
+## 📘 4. 技術実装
+
+### 1) SSD1306 OLED カーネルドライバ
+- カーネルI2Cフレームワークに基づくドライバ実装
+- 専用フォントデータ（16x10, 5x7）の設計および転送
+- OLEDのGDDRAM構造を考慮した画面更新ロジックの設計
+
+### 2) FSM (有限状態機械) 設計
+- 上位モードと内部状態を分離した階層型FSM構造の設計
+- 各モードで異なる状態遷移（State Flow）を持ち、ロータリーエンコーダの入力に応じた遷移を実行
+- 動作中も初期設定状態へ復帰可能に設計し、例外状況や誤操作に強い構造を実現
+
+### 3) WorkqueueによるBottom-half処理
+- 割り込みハンドラからOLED更新等の重い処理を分離し、Bottom-halfで実行
+- 専用ワークキューを構成し、カーネルのデフォルトワークキューとのリソース競合を防止
+- 割り込み負荷の軽減およびレスポンスの向上
+
+### 4) I2C通信の最適化
+- バルク転送方式の限界を分析
+- SSD1306のGDDRAM構造に合わせ、**ページ単位（128バイト）の分割転送**へ変更
+- データ損失を防ぎ、画面更新の正確性と転送効率を両立
+
+### 5) 入力デバイスドライバ
+- GPIO割り込みを利用したロータリーエンコーダ・スイッチの入力検知
+- 遅延処理と信号検証を組み合わせたデバウンスロジックにより、チャタリング問題を解決
+
+---
+
+## 👨‍💻 5. 担当役割と貢献
+
+- **FSMアーキテクチャ設計**
+  - モードと動作フェーズを分離した階層型FSMの設計
+  - 内部状態を IDLE / SETTING / RUNNING として構造化し、安定した制御フローを確立
+
+- **OLED転送アルゴリズムの最適化**
+  - ハードウェア受信バッファの限界を考慮したページ単位の分割転送
+  - データ欠落のない安定した画面描画を実現
+
+- **複合デバウンスアルゴリズムの適用**
+  - `udelay` と Falling Edge の二次検証ロジックを結合
+  - ロータリーエンコーダの物理的なチャタリングをソフトウェアで解決
+
+- **専用ワークキュー (my_workqueue) の設計**
+  - `system_wq` への依存を排除
+  - 独立したスケジューリング構造により、リソースのボトルネックと遅延問題を解決
+
+---
+
+## 🐞 6. トラブルシューティング
+
+### 1) I2C大量転送時のOLED画面残像問題
+- **現象**: 画面クリア時に1025バイトを一括送信すると、下部のクリアに失敗する
+- **分析**: `ftrace` の結果、送信自体は正常だが、OLED側の受信バッファ溢れによりデータ消失が発生
+- **解決**: 送信単位をページ（128バイト）単位に分割して転送
+- **結果**: 送信の安定性と描画の正確性を同時に確保
+
+### 2) ロータリーエンコーダの境界値におけるチャタリング
+- **現象**: 低速回転時、電圧の境界付近で信号のバタつきが発生
+- **分析**: Falling Edge 突入時の微細な信号の揺れにより誤作動することを確認
+- **解決**: 5msのデバウンス適用およびS2値による方向判定ロジックの実装
+- **結果**: 低速・高速回転のいずれでも安定した入力認識を確保
+
+### 3) カーネル共有ワークキューのボトルネック
+- **現象**: LED点滅機能を追加した後、OLEDの出力が停止
+- **分析**: `system_wq` 共有によるリソース競合（Resource Contention）の発生
+- **解決**: 専用ワークキュー (`my_workqueue`) 生成による実行環境の分離
+- **結果**: リアルタイム性の確保および制御の安定性が向上
+---
+
+## 📚 7. 学んだこと
+
+- **カーネルリソース管理と割り込みの最適化**:
+  割り込みハンドラとワークキューを分離し、専用ワークキューを運用することで、リソース競合が安定性に与える影響を実戦的な問題解決を通じて理解した。
+- **データシート分析とドライバ最適化**:
+  I2C通信フローの分析に基づき、ハードウェア制約下で性能と信頼性を両立させる設計手法を習得した。
+- **FSMによる構造的設計**:
+  マルチモードシステムにFSMを導入して複雑な状態遷移を体系化し、例外状況でも予測可能かつ拡張性の高い制御構造を設計する経験を積んだ。
+- **組込みソフトウェアエンジニアの視点**:
+  単なる機能実装を超え、システムが安定して動作するための「構造的設計」と「リソース管理」の重要性を実際の開発経験を通じて確立した。
 
 ---
 
