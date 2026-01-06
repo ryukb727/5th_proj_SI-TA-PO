@@ -9,7 +9,152 @@
 
 ### 🇰🇷 Korean Version
 
-# ⏱️ Linux 커널 디바이스 드라이버 기반 시계-타이머-뽀모도로 3 Mode 시간 관리 시스템
+# ⏱️ SI-TA-PO  
+## Linux Kernel Device Driver 기반 타이머 · 시계 · 뽀모도로 임베디드 시스템
+
+---
+
+## 💡 1. 프로젝트 개요
+
+본 프로젝트는 <strong>리눅스 커널 드라이버(v6.1)</strong>를 직접 설계·구현하여,
+하드웨어 자원을 커널 레벨에서 정밀하게 제어하고,
+보드 레벨에서 다양한 입·출력 디바이스를 커널 레벨로 통합 관리하는 <strong>시간 관리 시스템(SI-TA-PO)</strong>입니다.
+
+**SSD1306 OLED**와 **DS1302 RTC**를 데이터시트 기반으로 직접 제어하고,
+<strong>FSM(Finite State Machine)</strong> 아키텍처를 도입하여
+시계·타이머·뽀모도로 모드 간의 안정적인 상태 전환을 구현했습니다.
+
+특히 <strong>인터럽트 핸들러와 전용 워크큐를 분리 설계(Top/Bottom Half)</strong>하여
+저사양 임베디드 환경에서도 **지연 없는 사용자 입력 처리와 안정적인 화면 갱신**을 달성했습니다.
+
+---
+
+## 🛠️ 2. 기술 스택
+
+![C](https://img.shields.io/badge/Language-C-A8B9CC?style=for-the-badge&logo=c&logoColor=black)
+![Linux](https://img.shields.io/badge/OS-Linux%20Kernel%206.1-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![RaspberryPi](https://img.shields.io/badge/Platform-Raspberry%20Pi%204-A22846?style=for-the-badge&logo=raspberrypi&logoColor=white)
+
+![I2C](https://img.shields.io/badge/Interface-I2C-555555?style=for-the-badge)
+![GPIO](https://img.shields.io/badge/Interface-GPIO%20Interrupt-6DB33F?style=for-the-badge)
+
+![LinuxKernel](https://img.shields.io/badge/Kernel-Workqueue-0078D4?style=for-the-badge&logo=linux&logoColor=white)
+![FSM](https://img.shields.io/badge/Design-FSM-FF9800?style=for-the-badge)
+![Workqueue](https://img.shields.io/badge/Kernel%20Mechanism-Workqueue-00599C?style=for-the-badge&logo=linux&logoColor=white)
+![Workqueue](https://img.shields.io/badge/Linux%20Kernel-Workqueue-0078D4?style=for-the-badge&logo=linux&logoColor=white)
+![Workqueue](https://img.shields.io/badge/Kernel-Workqueue%20(Bottom--Half)-283593?style=for-the-badge&logo=linux&logoColor=white)
+
+![Linux](https://img.shields.io/badge/OS-Linux%20Kernel%206.1-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![Workqueue](https://img.shields.io/badge/Kernel%20Mechanism-Workqueue-00599C?style=for-the-badge&logo=linux&logoColor=white)
+![FSM](https://img.shields.io/badge/Design-FSM-FF9800?style=for-the-badge)
+
+
+![SSD1306](https://img.shields.io/badge/Display-SSD1306%20OLED-000000?style=for-the-badge)
+![DS1302](https://img.shields.io/badge/RTC-DS1302-3F51B5?style=for-the-badge)
+![RotaryEncoder](https://img.shields.io/badge/Input-Rotary%20Encoder-795548?style=for-the-badge)
+![TactSwitch](https://img.shields.io/badge/Input-Tact%20Switch-607D8B?style=for-the-badge)
+
+---
+
+## 🎯 3. 핵심 기능
+
+- **FSM 기반 3 Mode 제어**
+  - Clock / Timer / Pomodoro 모드 간 상위 상태 전환
+  - 각 모드 내부에서 설정·실행 상태를 FSM으로 분리 관리
+  - 상태 계층화를 통해 논리 충돌 및 예외 상황 방지
+
+- **정밀 입력 시스템**
+  - 로터리 엔코더 회전 입력을 통한 값(시/분/초/반복 횟 등) 설정
+  - 로터리 엔코더의 키 스위치를 활용한 모드 내부 상태 전환
+    - 예: 분 설정 ↔ 시 설정 ↔ 실행 상태 전환
+  - 택트 스위치를 이용한 상위 모드(Clock / Timer / Pomodoro) 전환
+  - 인터럽트 기반 입력 처리로 즉각적인 사용자 반응성 확보
+
+- **실시간 시각화**
+  - 현재 모드, 설정값, 진행 상태를 OLED에 실시간 출력
+  - 타이머 종료 시 LED 점멸을 통한 사용자 알림 제공
+
+---
+
+## 📘 4. 기술 구현
+
+### 1) SSD1306 OLED 커널 드라이버
+- 커널 I2C 프레임워크 기반 드라이버 구현
+- 전용 폰트 데이터(16x10, 5x7) 설계 및 전송
+- OLED GDDRAM 구조를 고려한 화면 갱신 로직 설
+
+### 2) FSM(Finite State Machine) 설계
+- 모드(Clock/Timer/Pomodoro)와 동작 단계를 상태 변수로 분리하여 FSM 구성
+- 로터리 엔코더 및 택트 스위치 입력에 따라 상태 전이 발생
+- 비동기 인터럽트 환경에서도 잘못된 상태 진입을 방지하도록 전이 조건을 명확히 정의
+
+### 3) Workqueue 기반 Bottom-half 처리
+- 인터럽트 핸들러에서 OLED 업데이트 등 무거운 작업을 분리하여 Bottom-half에서 처리전용 워크큐를 구성해 커널 기본 워크큐와의 리소스 경합을 방지
+- 커널 인터럽트 부하 감소 및 시스템 응답성 향상
+
+### 4) I2C 통신 최적화
+- 바이트 단위 및 대용량 일괄 전송 방식의 한계를 분석
+- SSD1306 GDDRAM 구조를 고려한 **Page 단위(128 Byte) 분할 전송**으로 전환
+- 데이터 유실 없이 화면 갱신 정확도와 전송 효율을 동시에 확보
+
+### 5) 입력 디바이스 드라이버
+- GPIO 인터럽트를 활용한 로터리 엔코더·스위치 입력 감지
+- 디바운싱 로직 적용으로 하드웨어 채터링 문제 해결
+
+---
+
+## 👨‍💻 5. 역할 및 기여
+
+- **FSM 아키텍처 설계**
+  - 시스템 상태를 IDLE / SETTING / RUNNING으로 세분화
+  - 예외 상황에서도 중단 없는 제어 흐름 확립
+
+- **OLED 전송 알고리즘 최적화**
+  - 하드웨어 수신 버퍼 한계를 고려한 페이지 단위 분할 전송
+  - 데이터 유실 없는 안정적인 화면 초기화 구현
+
+- **복합 디바운싱 알고리즘 적용**
+  - udelay + Falling Edge 2차 검증 로직 결합
+  - 로터리 엔코더의 하드웨어적 채터링을 소프트웨어 레벨에서 해결
+
+- **전용 워크큐(my_workqueue) 설계**
+  - system_wq 의존성 제거
+  - 독립적인 스케줄링 구조로 리소스 병목 및 지연 문제 해결
+
+---
+
+## 🐞 6. 트러블슈팅
+
+### 1) I2C 대용량 전송 시 OLED 화면 잔상 문제
+- **현상**: 화면 클리어 시 1024Byte 일괄 전송 → 하단부 클리어 실패
+- **분석**: ftrace 추적 결과, 커널 송신은 정상이나 OLED 수신 버퍼 한계로 데이터 유실 발생
+- **해결**: 전송 단위를 페이지(128 Byte) 단위로 분할하여 전송
+- **결과**: 전송 안정성과 화면 출력 정확도 동시 확보
+
+### 2) 로터리 엔코더 경계면 채터링 현상
+- **현상**: 저속 회전 시 전압 경계면에서 신호 떨림 발생
+- **분석**: Falling Edge 진입 시 미세 신호 떨림으로 오작동 확인
+- **해결**:  
+  - 5ms 디바운싱 적용  
+  - S1 Falling Edge 확인 후 S2 값을 읽는 조건부 방향 판별 로직 적용
+
+### 3) 커널 기본 워크큐 병목 현상
+- **현상**: LED 점멸 기능 추가 후 OLED 출력 중단
+- **분석**: system_wq 공유로 인한 리소스 경합 발생
+- **해결**: 전용 워크큐(my_workqueue) 생성으로 독립적인 실행 환경 구성
+- **결과**: 실시간성 확보 및 제어 안정성 향상
+
+---
+
+## 📚 7. 배운 점
+
+- 커널 인터럽트와 워크큐 구조에 대한 깊은 이해 및 리소스 관리 경험
+- 하드웨어 데이터시트 기반의 통신 최적화 설계 역량 강화
+- FSM 구조를 활용한 복잡한 임베디드 시스템 설계 방법 습득
+- BSP 및 임베디드 소프트웨어 개발에서 **구조적 설계와 안정성 확보의 중요성** 체득
+
+
+---
 
 <div align="center">
 <a href="#japanese">⬇️ 日本語バージョンへ移動 (Go to Japanese Version) ⬇️</a>
