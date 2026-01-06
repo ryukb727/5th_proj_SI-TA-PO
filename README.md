@@ -276,6 +276,11 @@
   <img src="docs/schematic/schematic.png" width="900">
 </p>
 
+## 소프트웨어 상태도 (FSM)
+프로젝트의 모드 전환 및 동작 로직을 나타내는 상태 다이어그램입니다.
+<p align="center">
+  <img src="docs/photos/FSM.png" width="800">
+</p>
 
 
 ## 주요 기능
