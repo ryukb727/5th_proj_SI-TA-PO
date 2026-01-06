@@ -36,14 +36,12 @@
 본 프로젝트는 <strong>리눅스 커널 드라이버(v6.1)</strong>를 직접 설계·구현하여,
 하드웨어 자원을 커널 레벨에서 정밀하게 제어하고,
 보드 레벨의 다양한 입·출력 디바이스를 커널 레벨로 통합 관리하는 <strong>시간 관리 시스템(SI-TA-PO)</strong>입니다.
-
 **SSD1306 OLED**와 **DS1302 RTC**를 데이터시트 기반으로 직접 제어하고,
 <strong>FSM(Finite State Machine)</strong> 아키텍처를 도입하여
 시계·타이머·뽀모도로 모드 간의 안정적인 상태 전환을 구현했습니다.
-
 특히 <strong>인터럽트 핸들러와 전용 워크큐를 분리 설계(Top/Bottom Half)</strong>하여
 저사양 임베디드 환경에서도 **지연 없는 사용자 입력 처리와 안정적인 화면 갱신**을 달성했습니다.
-
+<br>
 ### 🧩 시스템 블록 다이어그램 (System Architecture)
 <img width="2509" height="549" alt="Image" src="https://github.com/user-attachments/assets/142183e5-e9a6-4dac-930f-45f40e4922bb" />
 
