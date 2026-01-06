@@ -57,14 +57,13 @@
 ![C](https://img.shields.io/badge/Language-C-A8B9CC?style=for-the-badge&logo=c&logoColor=black)
 ![Linux](https://img.shields.io/badge/OS-Linux%20Kernel%206.1-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 ![RaspberryPi](https://img.shields.io/badge/Platform-Raspberry%20Pi%204-A22846?style=for-the-badge&logo=raspberrypi&logoColor=white)
-
+<br>
 ![I2C](https://img.shields.io/badge/Interface-I2C-555555?style=for-the-badge)
 ![GPIO](https://img.shields.io/badge/Interface-GPIO%20Interrupt-6DB33F?style=for-the-badge)
-
-![Linux](https://img.shields.io/badge/OS-Linux%20Kernel%206.1-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+<br>
 ![Workqueue](https://img.shields.io/badge/Kernel%20Mechanism-Workqueue-00599C?style=for-the-badge&logo=linux&logoColor=white)
 ![FSM](https://img.shields.io/badge/Design-FSM-FF9800?style=for-the-badge)
-
+<br>
 ![SSD1306](https://img.shields.io/badge/Display-SSD1306%20OLED-000000?style=for-the-badge)
 ![DS1302](https://img.shields.io/badge/RTC-DS1302-3F51B5?style=for-the-badge)
 ![RotaryEncoder](https://img.shields.io/badge/Input-Rotary%20Encoder-795548?style=for-the-badge)
