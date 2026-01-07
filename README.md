@@ -149,7 +149,7 @@
 - **분석**: ftrace 추적 결과, 커널 송신은 정상이나 OLED 수신 버퍼 한계로 데이터 유실 발생
 - **해결**: 전송 단위를 페이지(128 Byte) 단위로 분할하여 전송
 - **결과**: 전송 안정성과 화면 출력 정확도 동시 확보
-<img width="1080" height="771" alt="Image" src="https://github.com/user-attachments/assets/2e09b06b-4eaa-4faf-836a-190c8c4d0d1c" />
+<img width="1080" height="555" alt="Image" src="https://github.com/user-attachments/assets/900519a5-16c8-49ca-834f-7346f6ae345e" />
 <br>
 
 ### 2) 로터리 엔코더 경계면 채터링 현상
