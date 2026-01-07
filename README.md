@@ -230,7 +230,7 @@
 
 
 ### 🧩 システムブロック図 (System Architecture)
-<img width="2509" height="549" alt="Image" src="https://github.com/user-attachments/assets/142183e5-e9a6-4dac-930f-45f40e4922bb" />
+<img width="2509" height="632" alt="Image" src="https://github.com/user-attachments/assets/8a036071-baf2-41b3-ae2c-f037a51bc5da" />
 
 ### 🔌 回路図 (Schematic)
 <img width="1145" height="784" alt="Image" src="https://github.com/user-attachments/assets/15773fd2-9916-49aa-8377-cc9fbe68424c" />
@@ -262,7 +262,7 @@
   - Clock / Timer / Pomodoro モード間の上位状態遷移
   - 各モード内部での設定・実行状態をFSMで分離管理
   - 状態の階層化により、ロジックの衝突や例外動作を防止
-<img width="4528" height="3466" alt="Image" src="https://github.com/user-attachments/assets/ab2cc4bf-50c0-461c-bd4f-a1bf9bbb443d" />
+<img width="4535" height="3466" alt="Image" src="https://github.com/user-attachments/assets/f14276b8-1389-4213-a7f3-a6502cdae235" />
 
 - **精密な入力システム**
   - ロータリーエンコーダによる値（時/分/秒/反復回数など）の設定
