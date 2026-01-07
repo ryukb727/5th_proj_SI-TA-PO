@@ -160,6 +160,8 @@
   - 전기적 안정 확보를 위한 짧은 대기 후(GPIO 신호 안정화)
   - S1 Falling Edge 확인 후 S2 값을 읽는 조건부 방향 판별 로직 적용
 - **결과**: 저속·고속 회전 환경 모두에서 오작동 없는 안정적인 입력 인식 확보
+<img width="1080" height="677" alt="Image" src="https://github.com/user-attachments/assets/f9b31ace-141d-4986-a5fc-177cbd470cc6" />
+<br>
 
 ### 3) 커널 기본 워크큐 병목 현상
 - **현상**: LED 점멸 기능 추가 후 OLED 출력 중단
@@ -339,6 +341,8 @@
   - 電気的安定を確保するための短時間待機（GPIO信号の安定化）を挿入
   - S1のFalling Edge確定後にのみS2値を読み取る条件付き方向判別ロジックを実装
 - **結果**: 低速・高速回転のいずれの環境においても、誤動作のない安定した入力認識を実現
+<img width="1080" height="677" alt="Image" src="https://github.com/user-attachments/assets/f9b31ace-141d-4986-a5fc-177cbd470cc6" />
+<br>
 
 ### 3) カーネル共有ワークキューのボトルネック
 - **現象**: LED点滅機能を追加した後、OLEDの出力が停止
