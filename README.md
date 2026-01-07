@@ -168,6 +168,8 @@
 - **분석**: system_wq 공유로 인한 리소스 경합 발생
 - **해결**: 전용 워크큐(my_workqueue) 생성으로 독립적인 실행 환경 구성
 - **결과**: 실시간성 확보 및 제어 안정성 향상
+<img width="716" height="141" alt="Image" src="https://github.com/user-attachments/assets/32ad2cfd-fc44-4615-b017-37ba0abe762a" />
+<br>
 
 ---
 
@@ -349,6 +351,9 @@
 - **分析**: `system_wq` 共有によるリソース競合（Resource Contention）の発生
 - **解決**: 専用ワークキュー (`my_workqueue`) 生成による実行環境の分離
 - **結果**: リアルタイム性の確保および制御の安定性が向上
+<img width="716" height="141" alt="Image" src="https://github.com/user-attachments/assets/32ad2cfd-fc44-4615-b017-37ba0abe762a" />
+<br>
+
 ---
 
 ## 📚 7. 学んだこと
