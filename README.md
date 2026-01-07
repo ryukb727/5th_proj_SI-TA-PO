@@ -12,7 +12,7 @@
 # ⏱️ SI-TA-PO  
 ## Linux Kernel Device Driver 기반 타이머 · 시계 · 뽀모도로 임베디드 시스템
 
-<img width="2050" height="974" alt="Image" src="https://github.com/user-attachments/assets/745f11eb-b329-4c47-9dd5-5b34204aff43" />
+<img width="1080" height="415" alt="Image" src="https://github.com/user-attachments/assets/59a21f01-9670-4072-8c59-a7fb10bd443a" />
 
 ### MODE 1 시계
 <p align="left">
@@ -201,7 +201,7 @@
 # ⏱️ SI-TA-PO  
 ## Linuxカーネルデバイスドライバベース：タイマー・時計・ポモドーロ組込みシステム
 
-<img width="2050" height="974" alt="Image" src="https://github.com/user-attachments/assets/745f11eb-b329-4c47-9dd5-5b34204aff43" />
+<img width="1080" height="415" alt="Image" src="https://github.com/user-attachments/assets/59a21f01-9670-4072-8c59-a7fb10bd443a" />
 
 ### MODE 1 時計 (Clock)
 <p align="left">
